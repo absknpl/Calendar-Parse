@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Text to Calendar</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <h1>Text to Calendar</h1>
+      <p>Paste event text to create calendar events</p>
+    </div>
+
+    <textarea id="textInput" placeholder="Paste your event text here..."></textarea>
+    <button id="parseBtn">Parse Text</button>
+    
+    <div class="error" id="errorDisplay"></div>
+    
+    <div class="event-editor">
+      <label class="required-field">Event name</label>
+      <input type="text" id="eventTitle" placeholder="Event name">
+      <div class="error-message" id="titleError">Event name is required</div>
+      
+      <label class="required-field">Date</label>
+      <input type="date" id="eventDate">
+      <div class="error-message" id="dateError">Date is required</div>
+      
+      <div class="datetime-row">
+        <div style="flex: 1">
+          <label class="required-field">Start time</label>
+          <input type="time" id="startTime">
+          <div class="error-message" id="startTimeError">Start time is required</div>
+        </div>
+        <span>to</span>
+        <div style="flex: 1">
+          <label class="required-field">End time</label>
+          <input type="time" id="endTime">
+          <div class="error-message" id="endTimeError">End time is required</div>
+        </div>
+      </div>
+      
+      <label>Location</label>
+      <input type="text" id="eventLocation" placeholder="Location or address">
+      
+      <label>Meeting URL</label>
+      <input type="text" id="eventUrl" placeholder="Meeting URL">
+      
+      <div class="recurring-option">
+        <label>
+          <input type="checkbox" id="recurringCheckbox">
+          Repeats weekly
+        </label>
+      </div>
+    </div>
+    
+    <div class="export-buttons">
+      <button id="exportGoogle">Export to Google Calendar</button>
+      <button id="exportApple">Download for Apple Calendar</button>
+      <button id="exportNotion">Download for Notion</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
