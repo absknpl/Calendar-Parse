@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "Parse event details from text and create calendar events",
   "action": {
-    "default_popup": "popup/popup.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
