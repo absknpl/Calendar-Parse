@@ -45,12 +45,19 @@
       
       <label>Meeting URL</label>
       <input type="text" id="eventUrl" placeholder="Meeting URL">
+
+      <label>Notes</label>
+      <textarea id="eventNotes" placeholder="Additional notes or context..."></textarea>
       
       <div class="recurring-option">
-        <label>
-          <input type="checkbox" id="recurringCheckbox">
-          Repeats weekly
-        </label>
+        <label for="recurringCheckbox">Repeats</label>
+        <select id="recurringCheckbox">
+          <option value="">Does not repeat</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
       </div>
     </div>
     

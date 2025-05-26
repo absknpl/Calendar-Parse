@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const eventLocation = document.getElementById('eventLocation');
   const eventUrl = document.getElementById('eventUrl');
   const recurringCheckbox = document.getElementById('recurringCheckbox');
+  const eventNotes = document.getElementById('eventNotes');
   const exportGoogle = document.getElementById('exportGoogle');
   const exportApple = document.getElementById('exportApple');
   const exportNotion = document.getElementById('exportNotion');
@@ -92,7 +93,11 @@ document.addEventListener('DOMContentLoaded', function() {
     else if (/meet\.google|google meet/i.test(text)) location = 'Google Meet';
 
     // Recurring detection
-    const recurring = /(every week|weekly|repeats)/i.test(text);
+    let recurring = '';
+    if (/every day|daily/i.test(text)) recurring = 'daily';
+    else if (/every month|monthly/i.test(text)) recurring = 'monthly';
+    else if (/every year|yearly/i.test(text)) recurring = 'yearly';
+    else if (/every week|weekly|repeats/i.test(text)) recurring = 'weekly';
 
     return {
       title,
@@ -101,7 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
       endTime,
       location,
       url,
-      recurring
+      recurring,
+      notes: text
     };
   }
 
@@ -138,7 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
     endTime.value = event.endTime;
     eventLocation.value = event.location;
     eventUrl.value = event.url;
-    recurringCheckbox.checked = event.recurring;
+    recurringCheckbox.value = event.recurring;
+    eventNotes.value = event.notes || '';
   }
 
   function validateForm() {
@@ -196,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
       dates: `${formatDateForGoogle(start)}/${formatDateForGoogle(end)}`,
       details: `Location: ${eventLocation.value}\nURL: ${eventUrl.value}`,
       location: eventLocation.value,
-      recur: recurringCheckbox.checked ? `RRULE:FREQ=WEEKLY` : ''
+      recur: recurringCheckbox.value ? `RRULE:FREQ=${recurringCheckbox.value.toUpperCase()}` : ''
     });
     
     return `https://www.google.com/calendar/render?${params.toString()}`;
@@ -219,10 +226,10 @@ DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d+/g, '')}
 DTSTART:${start.toISOString().replace(/-|:|\.\d+/g, '')}
 DTEND:${end.toISOString().replace(/-|:|\.\d+/g, '')}
 SUMMARY:${eventTitle.value}
-DESCRIPTION:${eventUrl.value ? `Meeting URL: ${eventUrl.value}\\n` : ''}${eventLocation.value ? `Location: ${eventLocation.value}` : ''}
+DESCRIPTION:${eventNotes.value.replace(/\n/g, '\\n')}
 ${eventLocation.value ? `LOCATION:${eventLocation.value}` : ''}
 ${eventUrl.value ? `URL:${eventUrl.value}` : ''}
-${recurringCheckbox.checked ? 'RRULE:FREQ=WEEKLY' : ''}
+${recurringCheckbox.value ? `RRULE:FREQ=${recurringCheckbox.value.toUpperCase()}` : ''}
 END:VEVENT
 END:VCALENDAR`;
   }
@@ -233,7 +240,8 @@ Date: ${eventDate.value}
 Time: ${startTime.value} - ${endTime.value}
 ${eventLocation.value ? `Location: ${eventLocation.value}` : ''}
 ${eventUrl.value ? `URL: ${eventUrl.value}` : ''}
-${recurringCheckbox.checked ? 'Repeats: Weekly' : ''}`;
+${recurringCheckbox.value ? `Repeats: ${recurringCheckbox.value.charAt(0).toUpperCase() + recurringCheckbox.value.slice(1)}` : ''}
+${eventNotes.value ? `Notes: ${eventNotes.value}` : ''}`;
   }
 
   function downloadFile(filename, content, mimeType) {
